@@ -15,7 +15,7 @@ namespace FoosballGame.Tests
                 Set.InitRunningSet()));
 
             // Act
-            var firstSet = AddPointWorkflow.AddPoint(Team.TeamOne, newGame)
+            var firstSet = AddPointWorkflow.AddPoint(Team.TeamOne, newGame).GetResult()
                 .CastToFirstSet().State.CastToRunningSet();
 
             // Assert
@@ -31,7 +31,7 @@ namespace FoosballGame.Tests
                 new RunningSet(9, 0))));
 
             // Act
-            var game = AddPointWorkflow.AddPoint(Team.TeamOne, newGame)
+            var game = AddPointWorkflow.AddPoint(Team.TeamOne, newGame).GetResult()
                 .CastToSecondSet();
             var secondSet = game.State.CastToRunningSet();
 
@@ -50,7 +50,7 @@ namespace FoosballGame.Tests
                 new FinishedSet(Team.TeamOne)));
 
             // Act
-            var game = AddPointWorkflow.AddPoint(Team.TeamOne, newGame)
+            var game = AddPointWorkflow.AddPoint(Team.TeamOne, newGame).GetResult()
                 .CastToFinishedGame();
 
             // Assert
@@ -66,7 +66,7 @@ namespace FoosballGame.Tests
                 new FinishedSet(Team.TeamOne)));
 
             // Act
-            var game = AddPointWorkflow.AddPoint(Team.TeamTwo, newGame)
+            var game = AddPointWorkflow.AddPoint(Team.TeamTwo, newGame).GetResult()
                 .CastToThirdSet();
             var thirdSet = game.State.CastToRunningSet();
             // Assert
@@ -83,7 +83,7 @@ namespace FoosballGame.Tests
                 new FinishedSet(Team.TeamOne)));
 
             // Act
-            var game = AddPointWorkflow.AddPoint(Team.TeamTwo, newGame)
+            var game = AddPointWorkflow.AddPoint(Team.TeamTwo, newGame).GetResult()
                 .CastToFinishedGame();
 
             // Assert
@@ -97,10 +97,10 @@ namespace FoosballGame.Tests
             var newGame = Game.Create(new FinishedGame(Team.TeamOne));
 
             // Act
-            var result = () => AddPointWorkflow.AddPoint(Team.TeamTwo, newGame);
+            var result = AddPointWorkflow.AddPoint(Team.TeamTwo, newGame);
 
             // Assert
-            Assert.Throws<MatchIsAlreadyFinished>(result);
+            result.Match((MatchIsAlreadyFinished x) => x);
         }
     }
 }

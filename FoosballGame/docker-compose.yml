@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  foosballgame.webapi:
+    image: ${DOCKER_REGISTRY-}foosballgamewebapi
+    build:
+      context: .
+      dockerfile: FoosballGame.WebApi/Dockerfile
+    ports:
+         - 5000:80
+  db:
+     image: postgres:latest
+     ports:
+         - 5432:5432
+     volumes:
+       - db-data:/var/lib/postgresql/data/:rw
+     environment:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: user
+          POSTGRES_DB: test-db
+          PGDATA: /var/lib/postgresql/data/
+
+volumes:
+  db-data:
