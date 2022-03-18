@@ -2,7 +2,7 @@
 using FoosballGame.Domain.AddPoint;
 using FoosballGame.Infrastructure;
 
-namespace FoosballGame.Domain
+namespace FoosballGame.Domain.CommandHandlers
 {
     internal class CreateGameCommandHandler : ICommandHandler<CreateGame>
     {
@@ -17,9 +17,6 @@ namespace FoosballGame.Domain
         public async Task Handle(CreateGame command)
         {
             var entity = new GameDb(command.Id, DateTime.UtcNow);
-            entity.State.ApplyState(Game.Create(
-                new FirstSet(
-                    Set.InitRunningSet())));
             repository.Add(entity);
             await transactionExecutor.Commit();
         }

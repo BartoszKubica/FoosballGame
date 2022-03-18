@@ -9,9 +9,18 @@ namespace FoosballGame.Domain
             if (set.Team2Score == GameConstants.MaxScore)
                 return Team.TeamTwo;
             if (set.Team1Score == GameConstants.MaxScore)
-                return Team.TeamTwo;
+                return Team.TeamOne;
 
             throw new ArgumentOutOfRangeException(nameof(set), "No winner reachable");
+        }
+    }
+
+    public static class MyExtensions
+    {
+        public static void AddIfNotNull<TValue>(this IList<TValue> list, TValue? value)
+        {
+            if (value != null)
+                list.Add(value);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace FoosballGame.Infrastructure
     public interface IMediator
     {
         Task Send<TCommand>(TCommand command) where TCommand : ICommand;
-        Task<TResponse> SendAsync<TQuery, TResponse>(TQuery query) where TQuery : IQuery<TResponse>;
+        Task<TResponse> Send<TQuery, TResponse>(TQuery query) where TQuery : IQuery<TResponse>;
     }
 
     internal class Mediator : IMediator
@@ -26,7 +26,7 @@ namespace FoosballGame.Infrastructure
             return ((ICommandHandler<TCommand>)handler).Handle(command);
         }
 
-        public Task<TResponse> SendAsync<TQuery, TResponse>(TQuery query) where TQuery : IQuery<TResponse>
+        public Task<TResponse> Send<TQuery, TResponse>(TQuery query) where TQuery : IQuery<TResponse>
         {
             var queryType = query.GetType();
             var responseType = typeof(TResponse);

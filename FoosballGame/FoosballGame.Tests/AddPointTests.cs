@@ -47,11 +47,11 @@ namespace FoosballGame.Tests
             // Arrange
             var newGame = Game.Create(new SecondSet(Set.Create(
                 new RunningSet(9, 0)),
-                new FinishedSet(Team.TeamOne)));
+                new FinishedSet(Team.TeamOne, 10, 0)));
 
             // Act
             var game = AddPointWorkflow.AddPoint(Team.TeamOne, newGame).GetResult()
-                .CastToFinishedGame();
+                .CastToFinishedAfterSecondSet();
 
             // Assert
             Assert.Equal(Team.TeamOne, game.Winner);
@@ -63,7 +63,7 @@ namespace FoosballGame.Tests
             // Arrange
             var newGame = Game.Create(new SecondSet(Set.Create(
                     new RunningSet(0, 9)), 
-                new FinishedSet(Team.TeamOne)));
+                new FinishedSet(Team.TeamOne, 10, 0)));
 
             // Act
             var game = AddPointWorkflow.AddPoint(Team.TeamTwo, newGame).GetResult()
@@ -80,21 +80,21 @@ namespace FoosballGame.Tests
         {
             // Arrange
             var newGame = Game.Create(new ThirdSet(new RunningSet(9, 0), 
-                new FinishedSet(Team.TeamOne)));
+                new FinishedSet(Team.TeamOne, 0, 10)));
 
             // Act
             var game = AddPointWorkflow.AddPoint(Team.TeamTwo, newGame).GetResult()
-                .CastToFinishedGame();
+                .CastToFinishedAfterThirdSet();
 
             // Assert
             Assert.Equal(Team.TeamOne, game.Winner);
         }
 
         [Fact]
-        public void AddPoint_WhenMatchIsFinished_ShouldThrowException()
+        public void AddPoint_WhenMatchIsFinished_ShouldReturnMatchIsAlreadyFinished()
         {
             // Arrange
-            var newGame = Game.Create(new FinishedGame(Team.TeamOne));
+            var newGame = Game.Create(FinishedGame.Create(new FinishedAfterSecondSet(Team.TeamOne, 10, 0)));
 
             // Act
             var result = AddPointWorkflow.AddPoint(Team.TeamTwo, newGame);

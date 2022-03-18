@@ -22,8 +22,16 @@ namespace FoosballGame.Domain.AddPoint
             => game.Match((ThirdSet thirdSet) => thirdSet,
                 () => throw InvalidState.Create<Game, ThirdSet>());
 
-        public static FinishedGame CastToFinishedGame(this Game game)
-            => game.Match((FinishedGame finishedGame) => finishedGame,
+        public static FinishedAfterSecondSet CastToFinishedAfterSecondSet(this Game game)
+            => game.Match((FinishedGame finishedGame) => finishedGame.Match(
+                    (FinishedAfterSecondSet second) => second,
+                    () => throw InvalidState.Create<Game, FinishedAfterSecondSet>()),
+                () => throw InvalidState.Create<Game, FinishedGame>());
+
+        public static FinishedAfterThirdSet CastToFinishedAfterThirdSet(this Game game)
+            => game.Match((FinishedGame finishedGame) => finishedGame.Match(
+                    (FinishedAfterThirdSet third) => third,
+                    () => throw InvalidState.Create<Game, FinishedAfterSecondSet>()),
                 () => throw InvalidState.Create<Game, FinishedGame>());
 
         public static Game GetResult(this AddPointResult result)
