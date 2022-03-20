@@ -20,7 +20,7 @@ namespace FoosballGame.WebApi.Controllers
         public async Task<IActionResult> Create([FromBody] CreateGame cmd)
         {
             await mediator.Send(cmd);
-            return Created(nameof(GetDetails), new { id = cmd.Id});
+            return Created($"api/games/{cmd.Id}", new {id = cmd.Id});
         }
 
         [HttpPost("{id}/add-point")]

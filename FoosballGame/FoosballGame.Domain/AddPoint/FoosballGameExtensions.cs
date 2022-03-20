@@ -1,5 +1,4 @@
-﻿using dotVariant;
-using FoosballGame.Contracts.Exceptions;
+﻿using FoosballGame.Contracts.Exceptions;
 
 namespace FoosballGame.Domain.AddPoint
 {

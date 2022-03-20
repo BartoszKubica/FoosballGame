@@ -26,9 +26,9 @@ namespace FoosballGame.Domain
                     .HasColumnType("jsonb")
                     .HasConversion(
                         v => JsonConvert.SerializeObject(v,
-                            new JsonSerializerSettings { NullValueHandling = NullValueHandling.Include }),
+                            new JsonSerializerSettings {NullValueHandling = NullValueHandling.Include}),
                         v => JsonConvert.DeserializeObject<FoosballGameStateDb>(v,
-                            new JsonSerializerSettings { NullValueHandling = NullValueHandling.Include }));
+                            new JsonSerializerSettings {NullValueHandling = NullValueHandling.Include}));
             });
         }
     }

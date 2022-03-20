@@ -7,7 +7,7 @@
         }
 
         public static EntityNotFound Create<TEntity>(Guid id)
-            where TEntity : class 
-            => new ($"{typeof(TEntity).Name} with id: {id} not found");
+            where TEntity : class
+            => new($"{typeof(TEntity).Name} with id: {id} not found");
     }
 }

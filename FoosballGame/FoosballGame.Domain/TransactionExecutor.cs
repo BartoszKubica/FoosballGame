@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FoosballGame.Infrastructure;
 
 namespace FoosballGame.Domain
 {
-    internal interface ITransactionExecutor
-    {
-        Task Commit();
-    }
-
     internal class TransactionExecutor : ITransactionExecutor
     {
         private readonly FoosballGameDbContext context;

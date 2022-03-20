@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FoosballGame.Contracts;
+﻿using FoosballGame.Contracts;
 using FoosballGame.Domain.AddPoint;
 using FoosballGame.Infrastructure;
 
@@ -12,12 +7,10 @@ namespace FoosballGame.Domain.CommandHandlers
     internal class AddPointCommandHandler : ICommandHandler<AddPointToGame>
     {
         private readonly IGameRepository repository;
-        private readonly ITransactionExecutor transactionExecutor;
 
-        public AddPointCommandHandler(IGameRepository repository, ITransactionExecutor transactionExecutor)
+        public AddPointCommandHandler(IGameRepository repository)
         {
             this.repository = repository;
-            this.transactionExecutor = transactionExecutor;
         }
 
 
@@ -31,7 +24,6 @@ namespace FoosballGame.Domain.CommandHandlers
             entity.State.ApplyState(game);
 
             repository.Update(entity);
-            await transactionExecutor.Commit();
         }
     }
 }
