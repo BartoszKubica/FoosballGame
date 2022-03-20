@@ -1,3 +1,4 @@
+using FluentValidation;
 using FoosballGame.Contracts;
 using FoosballGame.Contracts.Exceptions;
 using FoosballGame.Domain.AddPoint;
@@ -98,6 +99,19 @@ namespace FoosballGame.Tests
 
             // Assert
             result.Match((MatchIsAlreadyFinished x) => x);
+        }
+
+        [Fact]
+        public void AddPoint_WhenValidationFailed_ShouldReturnValidationError()
+        {
+            // Arrange
+            var newGame = Game.Create(FinishedGame.Create(new FinishedAfterSecondSet(10, 0)));
+
+            // Act
+            var result = AddPointWorkflow.AddPoint(0, newGame);
+
+            // Assert
+            result.Match((ValidationException x) => x);
         }
     }
 }

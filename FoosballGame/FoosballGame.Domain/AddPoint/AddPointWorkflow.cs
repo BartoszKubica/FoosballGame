@@ -1,4 +1,5 @@
 ﻿using dotVariant;
+using FluentValidation;
 using FoosballGame.Contracts;
 using FoosballGame.Contracts.Exceptions;
 
@@ -7,7 +8,13 @@ namespace FoosballGame.Domain.AddPoint
     public class AddPointWorkflow
     {
         public static AddPointResult AddPoint(Team team, Game game)
-            => game.Visit(first =>
+        {
+            var validation = AddPointWorkflowValidator.Create().Validate(team);
+
+            if (!validation.IsValid)
+                return AddPointResult.Create(new ValidationException(validation.Errors));
+
+            return game.Visit(first =>
                 {
                     var set = AddPointInternal(first.State.CastToRunningSet(), team);
 
@@ -44,6 +51,7 @@ namespace FoosballGame.Domain.AddPoint
                     return AddPointResult.Create(newGame);
                 },
                 _ => AddPointResult.Create(MatchIsAlreadyFinished.Create()));
+        }
 
         private static bool CheckIsMatchOver(SecondSet second, FinishedSet firstSet)
             => firstSet.Team2Score == GameConstants.MaxScore &&
@@ -63,9 +71,19 @@ namespace FoosballGame.Domain.AddPoint
             {
                 Team.TeamOne => set with {Team1Score = (short) (set.Team1Score + 1)},
                 Team.TeamTwo => set with {Team2Score = (short) (set.Team2Score + 1)},
-                _ => throw new ArgumentOutOfRangeException(nameof(team), team, null)
             };
         }
+    }
+
+    public class AddPointWorkflowValidator : AbstractValidator<Team>
+    {
+        private AddPointWorkflowValidator()
+        {
+            RuleFor(x => x).IsInEnum();
+        }
+
+        public static AddPointWorkflowValidator Create()
+            => new AddPointWorkflowValidator();
     }
 
     public record FirstSet(Set State);
@@ -98,7 +116,8 @@ namespace FoosballGame.Domain.AddPoint
     [Variant]
     public partial class AddPointResult
     {
-        static partial void VariantOf(Game game, MatchIsAlreadyFinished matchAlreadyFinished);
+        static partial void VariantOf(Game game, MatchIsAlreadyFinished matchAlreadyFinished,
+            ValidationException validationError);
     }
 
     public record RunningSet(short Team1Score, short Team2Score);

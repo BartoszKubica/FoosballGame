@@ -35,6 +35,7 @@ namespace FoosballGame.Domain.AddPoint
 
         public static Game GetResult(this AddPointResult result)
             => result.Visit(game => game,
-                matchAlreadyFinished => throw matchAlreadyFinished);
+                matchAlreadyFinished => throw matchAlreadyFinished,
+                validationError => throw validationError);
     }
 }
